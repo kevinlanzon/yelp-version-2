@@ -1,6 +1,7 @@
 class RestaurantsController < ApplicationController
 
-  before_action :find_restaurant, only: [:show, :edit, :update, :destroy]
+  # before_action :find_restaurant, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, :except => [:index, :show]
 
 
   def new
@@ -25,27 +26,24 @@ class RestaurantsController < ApplicationController
   end
 
   def show
+    @restaurant = Restaurant.find(params[:id])
   end
 
   def edit
+    @restaurant = Restaurant.find(params[:id])
   end
 
   def update
+    @restaurant = Restaurant.find(params[:id])
     @restaurant.update(restaurant_params)
     flash[:notice] = "Restaurant updated"
     redirect_to '/restaurants'
   end
 
   def destroy
+    @restaurant = Restaurant.find(params[:id])
     @restaurant.destroy
     flash[:notice] = "Restaurant deleted"
     redirect_to '/restaurants'
   end
-
-  private
-
-  def find_restaurant
-    @restaurant = Restaurant.find(params[:id])
-  end
-
 end

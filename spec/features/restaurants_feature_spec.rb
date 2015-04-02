@@ -4,6 +4,7 @@ context 'creating restaurants' do
 
   context 'an invalid restaurant' do
     it 'does not let you submit a name that is too short' do
+      sign_in_helper
       visit '/restaurants'
       click_link 'Add Restaurant'
       fill_in 'Name', with: 'kf'

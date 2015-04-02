@@ -10,6 +10,7 @@ describe 'restaurant' do
 
   context 'adding a restaurant' do
     scenario 'to the list' do
+      sign_in_helper
       visit '/restaurants'
       click_on 'Add Restaurant'
       fill_in 'Name', :with => 'KFC'
@@ -19,6 +20,7 @@ describe 'restaurant' do
   end
 
   scenario 'does not display "No Restaurants Yet" when restaurant is added' do
+    sign_in_helper
     visit '/restaurants'
      click_on 'Add Restaurant'
       fill_in 'Name', :with => 'KFC'
@@ -51,7 +53,14 @@ describe 'restaurant' do
 
     let!(:kfc){Restaurant.create(name:'KFC')}
 
+    scenario 'cannot be done if a user is not signed in' do
+      visit "/restaurants"
+      click_link 'Delete KFC'
+      expect(page).to have_content "You need to sign in or sign up before continuing."
+    end
+
     scenario 'let the user delete a restaurant' do
+      sign_in_helper
       visit '/restaurants'
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
@@ -73,6 +82,7 @@ describe 'restaurant' do
      let!(:kfc){Restaurant.create(name:'KFC')}
 
      scenario 'let a user edit the restaurant name' do
+      sign_in_helper
       visit '/restaurants'
       click_link 'Edit KFC'
       fill_in 'Name', :with => 'Kentucky Fried Chicken'
@@ -80,4 +90,13 @@ describe 'restaurant' do
       expect(current_path).to eq '/restaurants'
       expect(page).to have_content 'Restaurant updated'
     end
+  end
+
+  def sign_in_helper
+    visit('/')
+    click_link('Sign up')
+    fill_in('Email', with: 'test@example.com')
+    fill_in('Password', with: 'testtest')
+    fill_in('Password confirmation', with: 'testtest')
+    click_button('Sign up')
   end
