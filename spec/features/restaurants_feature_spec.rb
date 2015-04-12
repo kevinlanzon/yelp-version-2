@@ -90,17 +90,24 @@ describe 'restaurant' do
   end
 
   context 'editing a restaurant' do
+    before {sign_in_helper}
+    before {create_restaurant('KFC')}
 
-     let!(:kfc){Restaurant.create(name:'KFC')}
-
-     scenario 'let a user edit the restaurant name' do
-      sign_in_helper
+    scenario 'let a user edit the restaurant name' do
       visit '/restaurants'
       click_link 'Edit KFC'
-      fill_in 'Name', :with => 'Kentucky Fried Chicken'
+      fill_in 'Name', with: 'Kentucky Fried Chicken'
       click_on 'Update'
       expect(current_path).to eq '/restaurants'
       expect(page).to have_content 'Restaurant updated'
+    end
+
+    scenario 'users can only edit restaurants which they have created' do
+      visit('/')
+      click_link 'Sign out'
+      second_login
+      click_link 'Edit KFC'
+      expect(page).to have_content 'Only the creator of the restaurant can edit it'
     end
   end
 
@@ -112,3 +119,20 @@ describe 'restaurant' do
     fill_in('Password confirmation', with: 'testtest')
     click_button('Sign up')
   end
+
+  def create_restaurant(restaurant_name)
+    visit('/restaurants')
+    click_link 'Add Restaurant'
+    fill_in 'Name', with: restaurant_name
+    click_button 'Add'
+  end
+
+  def second_login
+    visit '/restaurants'
+    click_link 'Sign up'
+    fill_in 'Email', with: "test2@test.com"
+    fill_in 'Password', with: "testtest"
+    fill_in 'Password confirmation', with: "testtest"
+    click_button 'Sign up'
+  end
+

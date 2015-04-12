@@ -2,26 +2,26 @@ class RestaurantsController < ApplicationController
 
   before_action :authenticate_user!, :except => [:index, :show]
 
+  def index
+    @restaurants = Restaurant.all
+  end
 
   def new
     @restaurant = Restaurant.new
   end
 
+  def restaurant_params
+      params.require(:restaurant).permit(:name, :description, :user_id)
+  end
+
   def create
-    @restaurant = Restaurant.create(restaurant_params)
+    @user = current_user
+    @restaurant = @user.restaurants.new(restaurant_params)
     if @restaurant.save
       redirect_to restaurants_path
     else
       render 'new'
     end
-  end
-
-  def restaurant_params
-      params.require(:restaurant).permit(:name)
-  end
-
-  def index
-    @restaurants = Restaurant.all
   end
 
   def show
@@ -30,6 +30,10 @@ class RestaurantsController < ApplicationController
 
   def edit
     @restaurant = Restaurant.find(params[:id])
+    if current_user.id != @restaurant.user_id
+      flash[:notice] = 'Only the creator of the restaurant can edit it'
+      redirect_to '/restaurants'
+    end
   end
 
   def update
