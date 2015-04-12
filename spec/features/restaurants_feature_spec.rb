@@ -62,17 +62,17 @@ describe 'restaurant' do
   end
 
   context 'deleting a restaurant' do
-
-    let!(:kfc){Restaurant.create(name:'KFC')}
+    before {sign_in_helper}
+    before {create_restaurant('KFC')}
 
     scenario 'cannot be done if a user is not signed in' do
       visit "/restaurants"
+      click_link 'Sign out'
       click_link 'Delete KFC'
       expect(page).to have_content "You need to sign in or sign up before continuing."
     end
 
     scenario 'let the user delete a restaurant' do
-      sign_in_helper
       visit '/restaurants'
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
@@ -86,6 +86,14 @@ describe 'restaurant' do
       click_button 'Leave Review'
       click_link 'Delete KFC'
       expect(page).not_to have_content "this isn't chicken!"
+    end
+
+    scenario 'users can only delete restaurants which they have created' do
+      visit('/')
+      click_link 'Sign out'
+      second_login
+      click_link 'Delete KFC'
+      expect(page).to have_content 'Only the creator of the restaurant can delete it'
     end
   end
 
@@ -113,15 +121,15 @@ describe 'restaurant' do
 
   def sign_in_helper
     visit('/')
-    click_link('Sign up')
-    fill_in('Email', with: 'test@example.com')
-    fill_in('Password', with: 'testtest')
-    fill_in('Password confirmation', with: 'testtest')
-    click_button('Sign up')
+    click_link 'Sign up'
+    fill_in 'Email', with: 'test@example.com'
+    fill_in 'Password', with: 'testtest'
+    fill_in 'Password confirmation', with: 'testtest'
+    click_button 'Sign up'
   end
 
   def create_restaurant(restaurant_name)
-    visit('/restaurants')
+    visit '/restaurants'
     click_link 'Add Restaurant'
     fill_in 'Name', with: restaurant_name
     click_button 'Add'
