@@ -1,6 +1,15 @@
 Yelp Clone
 ==========
-[Makers Academy](http://www.makersacademy.com) Week 9 Project
+[Makers Academy](http://www.makersacademy.com) Week 9 Project.
+
+This project is a clone of [Yelp](http://www.yelp.co.uk/). The goal is to introduce you to Rails, focusing especially on:
+
+- Creating Rails applications
+- The structure of Rails apps (MVC, the router, helpers)
+- TDD in Rails, with RSpec & Capybara
+- Associations
+- Validations
+- AJAX in Rails
 
 This is version 2 of the project. I pair programmed with [Meads](https://github.com/meads58). 
 
