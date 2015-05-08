@@ -11,7 +11,7 @@ This project is a clone of [Yelp](http://www.yelp.co.uk/). The goal is to introd
 - Validations
 - AJAX in Rails
 
-This is version 2 of the project. I pair programmed with [Meads](https://github.com/meads58). 
+This is version 2 of the project. I paired with [Meads](https://github.com/meads58). 
 
 We restarted this project on the second day from scratch but this time without using the tutorial. The objectives of this exercise was to fully absorb what we had learned from our first attempt whilst keeping the same objectives - OOD, learning folder structure, setting up a postgresql database and of course TDD.
 
